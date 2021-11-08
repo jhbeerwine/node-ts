@@ -269,5 +269,3 @@ interface Item {
 }
 
 let itemEntity: Entity<Item> = {id: 1, name: "Laptop", price: 150};
-
-console.log('test pull request')
