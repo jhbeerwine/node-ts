@@ -1,6 +1,10 @@
 import express, { Request, Response, Application } from 'express';
 import mysql from 'mysql2'
 import * as dotenv from "dotenv";
+import cors from 'cors'
+
+import routes from './routes'
+import { OptObj } from './interface/common'
 
 dotenv.config();
 
@@ -13,6 +17,13 @@ const connection = mysql.createConnection({
   database: process.env.DB_NAME
 });
 
+const corsOptions:OptObj<string> = {
+  origin: "http://localhost:3030",
+};
+
+// 필요없는듯
+// app.use(cors(corsOptions));
 app.use(express.json());
+routes(app);
 
 export { app, PORT, connection }

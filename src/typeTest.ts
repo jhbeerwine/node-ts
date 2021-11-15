@@ -251,7 +251,7 @@ function createInstance3<R, T extends { new(...constructorArgs: any[]): R }>(con
 
 class Test3 {
 	private x: number;
-
+  
 	constructor(x: number) {
 		this.x = x;
 	}
@@ -269,3 +269,5 @@ interface Item {
 }
 
 let itemEntity: Entity<Item> = {id: 1, name: "Laptop", price: 150};
+
+
