@@ -1,5 +1,5 @@
 import express, { Request, Response, Application } from 'express';
-import fs from'fs'
+import fs from 'fs'
 import mysql from 'mysql2'
 import * as dotenv from "dotenv";
 import cors from 'cors'
@@ -18,8 +18,8 @@ const connection = mysql.createConnection({
   database: process.env.DB_NAME
 });
 
-const corsOptions:OptObj<string> = {
-  origin: "http://localhost:3000",
+const corsOptions: OptObj<string> = {
+  origin: "https://localhost:3000",
 };
 
 const options = {
