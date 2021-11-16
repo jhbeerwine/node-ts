@@ -1,7 +1,9 @@
-import { app, PORT, connection } from './configure'
+import https from 'https'
+import { app, options, PORT, connection } from './configure'
+
+const httpsServer = https.createServer(options, app);
 
 connection.connect();
-
-app.listen(PORT, (): void => {
-  console.log(`Server Running here 👉 https://localhost:${PORT}`);
+httpsServer.listen(PORT, (): void => {
+  console.log(`Server Running here 👉 https://localhost:${PORT}`);  
 });
