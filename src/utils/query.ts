@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { connection } from './configure'
+import { connection } from '../configure'
 import { OkPacket, RowDataPacket } from "mysql2";
 
 const queryResult = (query:string) => {

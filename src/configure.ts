@@ -1,4 +1,5 @@
 import express, { Request, Response, Application } from 'express';
+import path from "path";
 import fs from 'fs'
 import mysql from 'mysql2'
 import * as dotenv from "dotenv";
@@ -7,7 +8,16 @@ import cors from 'cors'
 import routes from './routes'
 import { OptObj } from './interface/common'
 
-dotenv.config();
+try {
+  dotenv.config({
+    path: path.resolve(
+      process.cwd(),
+      process.env.NODE_ENV == "development" ? ".env.dev" : ".env"
+    )
+  });
+} catch (e) {
+  console.warn(e)
+}
 
 const app: Application = express();
 const PORT: Number | String = process.env.PORT || 443;
@@ -18,11 +28,13 @@ const connection = mysql.createConnection({
   database: process.env.DB_NAME
 });
 
-const corsOptions: OptObj<string> = {
+const corsOptions:OptObj<string> = {
   origin: "https://localhost:3000",
 };
 
 const options = {
+
+
   key: fs.readFileSync(__dirname + '/certs/key.pem'),
   cert: fs.readFileSync(__dirname + '/certs/cert.pem')
 };

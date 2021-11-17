@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { connection } from '../configure'
 import { OkPacket, RowDataPacket } from "mysql2";
-import { queryResult } from '../query'
+import { queryResult } from '../utils/query'
 
 const router = express.Router();
 

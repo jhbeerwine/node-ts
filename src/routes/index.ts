@@ -1,5 +1,4 @@
 import express, { Request, Response } from 'express';
-import { queryResult } from '../query'
 
 const router = express.Router();
 
