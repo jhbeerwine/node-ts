@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { connection } from "../configure";
 import { OkPacket, RowDataPacket } from "mysql2";
+import jwt from "jsonwebtoken";
 import { queryResult } from "../utils/query";
 import encrypt from "../utils/encrypt";
 
@@ -53,7 +54,6 @@ router.post("/signup", async (req: Request, res: Response): Promise<any> => {
 
 router.post("/signin", async (req: Request, res: Response): Promise<any> => {
   const { memid, mempw } = req.body;
-
   const queryString: string = `SELECT salt, member_pw from mymembers where member_id = "${memid}"`;
 
   connection.query(queryString, async (error, result): Promise<any> => {
@@ -67,7 +67,22 @@ router.post("/signin", async (req: Request, res: Response): Promise<any> => {
       const { hashed } = await encrypt.procEncryption(mempw, salt);
 
       if (member_pw === hashed) {
+        const accesToken = jwt.sign(
+          { memid },
+          process.env.TOKEN_KEY as string,
+          {
+            expiresIn: 4,
+            issuer: "vader",
+          }
+        );
+        const refreshToken = jwt.sign({}, process.env.TOKEN_KEY as string, {
+          expiresIn: "14d",
+          issuer: "vader",
+        });
+        res.cookie("accessToken", accesToken);
         res.json({ body: "로그인 성공" });
+
+        // res.cookie('refreshToken', refreshToken);
       } else {
         res.json({ body: "로그인 실퍠" });
       }

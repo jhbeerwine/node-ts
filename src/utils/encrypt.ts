@@ -1,15 +1,13 @@
 import crypto from "crypto";
 
 const algorithm = "aes-192-cbc";
-const password = "bncaskdbvasbvlaslslasfhj";
-const key = crypto.scryptSync(password, "GfG", 24);
+const secret = "bncaskdbvasbvlaslslasfhj";
+const key = crypto.scryptSync(secret, "GfG", 24);
 const iv = Buffer.alloc(16, 0);
 const encrypt = {
   procEncryption: async (password: string, saltIng?: string): Promise<any> => {
     const salt: string =
-      saltIng === undefined
-        ? (await crypto.randomBytes(32)).toString("hex")
-        : saltIng;
+      saltIng === undefined ? crypto.randomBytes(32).toString("hex") : saltIng;
     return new Promise(async (resolve, reject) => {
       try {
         crypto.pbkdf2(
