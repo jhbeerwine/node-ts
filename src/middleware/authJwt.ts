@@ -14,16 +14,20 @@ const authJwt = {
 
     // SELECT TIMESTAMPDIFF(MINUTE, '2021-11-18 17:12:18', CURRENT_TIMESTAMP)
 
-    jwt.verify(token, "darthvader_dev", (err: any, decoded: any) => {
-      if (err) {
-        return res.status(401).send({
-          message: "Unauthorized!",
-        });
+    jwt.verify(
+      token,
+      process.env.TOKEN_KEY as string,
+      (err: any, decoded: any) => {
+        if (err) {
+          return res.status(401).send({
+            message: "Unauthorized!",
+          });
+        }
+        req.memid = decoded.id;
+        console.log("authorized");
+        next();
       }
-      req.memid = decoded.id;
-      console.log("authorized");
-      next();
-    });
+    );
   },
 };
 
