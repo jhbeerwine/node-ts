@@ -14,31 +14,23 @@ const mid = (req: any, res: any, next: any) => {
   );
   next();
 };
-router.use(mid);
+router.use(mid, authJwt.verifyToken);
 
-router.get(
-  "/read",
-  authJwt.verifyToken,
-  async (req: Request, res: Response): Promise<any> => {
-    const queryString: string = `SELECT * FROM mybbs`;
+router.get("/read", async (req: Request, res: Response): Promise<any> => {
+  const queryString: string = `SELECT * FROM mybbs`;
 
-    try {
-      const result = await queryResult(queryString);
-      res.json({ body: result });
-    } catch (e) {
-      console.log("error", e);
-    }
+  try {
+    const result = await queryResult(queryString);
+    res.json({ body: result });
+  } catch (e) {
+    console.log("error", e);
   }
-);
+});
 
-router.get(
-  "/test-token",
-  [authJwt.verifyToken],
-  async (req: Request, res: Response): Promise<any> => {
-    console.log("test token");
-    res.send("done");
-  }
-);
+router.get("/test-token", async (req: Request, res: Response): Promise<any> => {
+  console.log("test token");
+  res.send("done");
+});
 
 router.post("/write", (req: Request, res: Response): void => {
   const { title, body } = req.body;
