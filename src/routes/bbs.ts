@@ -40,7 +40,11 @@ router.post("/write", (req: Request, res: Response): void => {
   connection.query(queryString, (error, result): void => {
     if (error) throw error;
 
-    const rows: any = <RowDataPacket[]>result;
+    interface GenericIdentityFnExt {
+      [key: number | string]: any;
+    }
+
+    const rows: GenericIdentityFnExt = result as RowDataPacket[];
     if (rows.serverStatus === 2) res.json({ body: "쓰기 성공" });
   });
 });

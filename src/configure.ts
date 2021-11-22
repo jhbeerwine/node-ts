@@ -20,7 +20,7 @@ try {
 }
 
 const app: Application = express();
-const PORT: Number | String = process.env.PORT || 443;
+const PORT: number | string = process.env.PORT || 443;
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,

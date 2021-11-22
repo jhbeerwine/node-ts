@@ -8,7 +8,7 @@ import encrypt from "../utils/encrypt";
 const router = express.Router();
 
 router.get("/list", async (req: Request, res: Response): Promise<any> => {
-  const queryString: string = `SELECT member_id FROM mymembers`;
+  const queryString = `SELECT member_id FROM mymembers`;
   try {
     const result = await queryResult(queryString);
     res.json({ body: result });
@@ -41,7 +41,7 @@ router.post("/signup", async (req: Request, res: Response): Promise<any> => {
   const { memid, mempw } = req.body;
   const { salt, hashed } = await encrypt.procEncryption(mempw);
 
-  const queryString: string = `INSERT INTO mymembers(member_id, member_pw, salt)
+  const queryString = `INSERT INTO mymembers(member_id, member_pw, salt)
         VALUES("${memid}", "${hashed}", "${salt}")`;
 
   connection.query(queryString, (error, result): void => {
@@ -54,7 +54,7 @@ router.post("/signup", async (req: Request, res: Response): Promise<any> => {
 
 router.post("/signin", async (req: Request, res: Response): Promise<any> => {
   const { memid, mempw } = req.body;
-  const queryString: string = `SELECT salt, member_pw from mymembers where member_id = "${memid}"`;
+  const queryString = `SELECT salt, member_pw from mymembers where member_id = "${memid}"`;
 
   connection.query(queryString, async (error, result): Promise<any> => {
     if (error) throw error;
