@@ -7,15 +7,8 @@ import { authJwt } from "../middleware/";
 import jwt from "jsonwebtoken";
 
 const router = express.Router();
-const mid = (req: any, res: any, next: any) => {
-  res.header(
-    "Access-Control-Allow-Headers",
-    "x-access-token, Origin, Content-Type, Accept"
-  );
-  next();
-};
-// authJwt.verifyToken
-router.use(mid);
+
+// router.use(authJwt.verifyToken);
 
 router.get("/read", async (req: Request, res: Response): Promise<any> => {
   const queryString = `SELECT * FROM mybbs`;
