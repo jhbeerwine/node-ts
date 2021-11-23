@@ -45,10 +45,14 @@ router.post("/signup", async (req: Request, res: Response): Promise<any> => {
         VALUES("${memid}", "${hashed}", "${salt}")`;
 
   connection.query(queryString, (error, result): void => {
-    if (error) throw error;
+    if (error) {
+      throw error;
+    }
 
     const rows: any = <RowDataPacket[]>result;
-    if (rows.serverStatus === 2) res.json({ body: "가입 성공" });
+    if (rows.serverStatus === 2) {
+      res.json({ body: "가입 성공" });
+    }
   });
 });
 
@@ -57,11 +61,15 @@ router.post("/signin", async (req: Request, res: Response): Promise<any> => {
   const queryString = `SELECT salt, member_pw from mymembers where member_id = "${memid}"`;
 
   connection.query(queryString, async (error, result): Promise<any> => {
-    if (error) throw error;
+    if (error) {
+      throw error;
+    }
 
     const rows: any = <RowDataPacket[]>result;
 
-    if (rows.length === 0) res.json({ body: "해당 아이디 없음" });
+    if (rows.length === 0) {
+      res.json({ body: "해당 아이디 없음" });
+    }
     if (rows[0]) {
       const { member_pw, salt } = rows[0];
       const { hashed } = await encrypt.procEncryption(mempw, salt);

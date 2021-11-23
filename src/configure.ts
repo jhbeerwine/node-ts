@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import routes from "./routes";
 import { OptObj } from "./interface/common";
+import cookieParser from "cookie-parser";
 
 try {
   dotenv.config({
@@ -28,8 +29,9 @@ const connection = mysql.createConnection({
   database: process.env.DB_NAME,
 });
 
-const corsOptions: OptObj<string> = {
+const corsOptions: any = {
   origin: "https://localhost:3000",
+  credentials: true,
 };
 
 const options = {
@@ -40,6 +42,7 @@ const options = {
 // https 인 경우 필요
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(cookieParser());
 routes(app);
 
 export { app, options, PORT, connection };

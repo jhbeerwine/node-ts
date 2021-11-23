@@ -14,14 +14,39 @@ const mid = (req: any, res: any, next: any) => {
   );
   next();
 };
-router.use(mid, authJwt.verifyToken);
+// authJwt.verifyToken
+router.use(mid);
 
 router.get("/read", async (req: Request, res: Response): Promise<any> => {
-  const queryString: string = `SELECT * FROM mybbs`;
+  const queryString = `SELECT * FROM mybbs`;
 
   try {
     const result = await queryResult(queryString);
-    res.json({ body: result });
+    res.json({ data: result });
+  } catch (e) {
+    console.log("error", e);
+  }
+});
+
+router.get("/get-cookie", async (req: Request, res: Response): Promise<any> => {
+  try {
+    let randomNumber = Math.random().toString();
+    randomNumber = randomNumber.substring(2, randomNumber.length);
+    res.cookie("cookieName", randomNumber, {
+      maxAge: 900000,
+      httpOnly: true,
+      secure: true,
+    });
+    res.send({ message: "cookie set" });
+  } catch (e) {
+    console.log("error", e);
+  }
+});
+
+router.get("/del-cookie", async (req: Request, res: Response): Promise<any> => {
+  try {
+    res.clearCookie("cookieName");
+    res.send({ message: "cookie deleted" });
   } catch (e) {
     console.log("error", e);
   }
@@ -34,18 +59,22 @@ router.get("/test-token", async (req: Request, res: Response): Promise<any> => {
 
 router.post("/write", (req: Request, res: Response): void => {
   const { title, body } = req.body;
-  const queryString: string = `INSERT INTO mybbs(title, body)
+  const queryString = `INSERT INTO mybbs(title, body)
         VALUES("${title}", "${body}")`;
 
   connection.query(queryString, (error, result): void => {
-    if (error) throw error;
+    if (error) {
+      throw error;
+    }
 
     interface GenericIdentityFnExt {
       [key: number | string]: any;
     }
 
     const rows: GenericIdentityFnExt = result as RowDataPacket[];
-    if (rows.serverStatus === 2) res.json({ body: "쓰기 성공" });
+    if (rows.serverStatus === 2) {
+      res.json({ body: "쓰기 성공" });
+    }
   });
 });
 
