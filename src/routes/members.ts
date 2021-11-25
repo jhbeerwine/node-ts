@@ -49,9 +49,9 @@ router.post("/signup", async (req: Request, res: Response): Promise<any> => {
       throw error;
     }
 
-    const rows: any = <RowDataPacket[]>result;
+    const rows: any = result as RowDataPacket[];
     if (rows.serverStatus === 2) {
-      res.json({ body: "가입 성공" });
+      res.json({ message: "가입 성공" });
     }
   });
 });
@@ -65,34 +65,56 @@ router.post("/signin", async (req: Request, res: Response): Promise<any> => {
       throw error;
     }
 
-    const rows: any = <RowDataPacket[]>result;
+    const rows: any = result as RowDataPacket[];
 
     if (rows.length === 0) {
+      res.cookie("accessToken", "null");
       res.json({ body: "해당 아이디 없음" });
     }
     if (rows[0]) {
-      const { member_pw, salt } = rows[0];
+      const { member_id, member_pw, salt } = rows[0];
       const { hashed } = await encrypt.procEncryption(mempw, salt);
 
       if (member_pw === hashed) {
-        const accesToken = jwt.sign(
+        const cookieCoption = {
+          maxAge: 900000,
+          httpOnly: true,
+          secure: true,
+        };
+        const accessToken = jwt.sign(
           { memid },
           process.env.TOKEN_KEY as string,
           {
-            expiresIn: 4,
-            issuer: "vader",
+            expiresIn: 10000,
+            issuer: process.env.TOKEN_ISSUER as string,
           }
         );
         const refreshToken = jwt.sign({}, process.env.TOKEN_KEY as string, {
           expiresIn: "14d",
-          issuer: "vader",
+          issuer: process.env.TOKEN_ISSUER as string,
         });
-        res.cookie("accessToken", accesToken);
-        res.json({ body: "로그인 성공" });
 
-        // res.cookie('refreshToken', refreshToken);
+        const queryString = `update mymembers
+          set token_date = CURRENT_TIMESTAMP
+          where member_id = '${memid}'`;
+
+        connection.query(queryString, (error, result): void => {
+          if (error) {
+            throw error;
+          }
+          interface GenericIdentityFnExt {
+            [key: number | string]: any;
+          }
+
+          const rows: GenericIdentityFnExt = result as RowDataPacket[];
+          if (rows.serverStatus === 2) {
+            res.cookie("accessToken", accessToken, cookieCoption);
+            res.cookie("refreshToken", refreshToken, cookieCoption);
+            res.json({ message: "로그인 성공" });
+          }
+        });
       } else {
-        res.json({ body: "로그인 실퍠" });
+        res.json({ message: "로그인 실퍠" });
       }
     }
   });
