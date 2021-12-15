@@ -7,6 +7,7 @@ import cors from "cors";
 import routes from "./routes";
 import { OptObj } from "./interface/common";
 import cookieParser from "cookie-parser";
+import {} from "../global";
 
 try {
   dotenv.config({
@@ -22,13 +23,15 @@ try {
 
 const app: Application = express();
 const PORT: number | string = process.env.PORT || 443;
-const connection = mysql.createConnection({
+const connection: mysql.Connection = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PWD,
   database: process.env.DB_NAME,
   timezone: "Z",
 });
+
+global.db = connection;
 
 const corsOptions: any = {
   origin: "https://localhost:3000",
