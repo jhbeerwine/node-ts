@@ -1,5 +1,5 @@
 interface OptObj<T> {
-  [string:number | string]: T
+  [string: number | string]: T;
 }
 
-export { OptObj }
+export type { OptObj };

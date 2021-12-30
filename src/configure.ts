@@ -5,7 +5,6 @@ import mysql from "mysql2";
 import dotenv from "dotenv";
 import cors from "cors";
 import routes from "./routes";
-import { OptObj } from "./interface/common";
 import cookieParser from "cookie-parser";
 import {} from "../global";
 
@@ -39,8 +38,8 @@ const corsOptions: any = {
 };
 
 const options = {
-  key: fs.readFileSync(__dirname + "/certs/key.pem"),
-  cert: fs.readFileSync(__dirname + "/certs/cert.pem"),
+  key: fs.readFileSync(__dirname + "/../certs/key.pem"),
+  cert: fs.readFileSync(__dirname + "/../certs/cert.pem"),
 };
 
 // https 인 경우 필요
