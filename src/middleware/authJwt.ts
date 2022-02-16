@@ -4,6 +4,8 @@ import { OkPacket, RowDataPacket } from "mysql2";
 import jwt from "jsonwebtoken";
 import moment from "moment";
 import { tzoffset, toIsoDate } from "../utils/date";
+import morgan from "morgan";
+import { logError } from "../utils/error/errorHandler";
 
 interface Req extends Request {
   [key: number | string]: any;
@@ -13,8 +15,9 @@ const authJwt = {
   verifyToken: (req: Req, res: Response, next: any) => {
     const key = process.env.TOKEN_KEY || "";
     const { accessToken: token }: any = req.cookies;
-    console.log("authJwt req", token);
+
     if (!token) {
+      morgan.token("customError", () => "No token provided!");
       return res.status(403).send({
         message: "No token provided!",
       });
@@ -23,7 +26,7 @@ const authJwt = {
     // SELECT TIMESTAMPDIFF(MINUTE, '2021-11-18 17:12:18', CURRENT_TIMESTAMP)
 
     jwt.verify(token, key, (err: any, decoded: any) => {
-      console.log("err", err);
+      morgan.token("customError", () => err.message);
       if (err) {
         return res.status(401).send({
           message: err.message,

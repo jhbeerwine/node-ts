@@ -8,7 +8,7 @@ const encrypt = {
   procEncryption: async (password: string, saltIng?: string): Promise<any> => {
     const salt: string =
       saltIng === undefined ? crypto.randomBytes(32).toString("hex") : saltIng;
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       try {
         crypto.pbkdf2(
           password,
@@ -17,7 +17,9 @@ const encrypt = {
           12,
           "sha512",
           (err, derivedKey) => {
-            if (err) throw err;
+            if (err) {
+              throw err;
+            }
             const hashed = derivedKey.toString("hex");
             resolve({ salt, hashed });
           }
@@ -29,7 +31,7 @@ const encrypt = {
     });
   },
   cipher: async (password: string) => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const cipher = crypto.createCipheriv(algorithm, key, iv);
 
       let encrypted = "";
@@ -55,7 +57,7 @@ const encrypt = {
     });
   },
   deCipher: async (password: string) => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const decipher = crypto.createDecipheriv(algorithm, key, iv);
 
       let decrypted = "";

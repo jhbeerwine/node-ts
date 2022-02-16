@@ -16,6 +16,7 @@ module.exports = {
     "@typescript-eslint/no-explicit-any": 0,
     "no-return-await": 2,
     curly: 2,
+    "@typescript-eslint/no-unused-vars": [0],
     "@typescript-eslint/no-inferrable-types": [
       "error",
       {

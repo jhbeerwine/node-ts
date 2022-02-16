@@ -4,6 +4,7 @@ import { OkPacket, RowDataPacket } from "mysql2";
 import jwt from "jsonwebtoken";
 import { queryResult } from "../utils/query";
 import encrypt from "../utils/encrypt";
+import { Api404Error } from "../utils/error/api404Error";
 
 const router = express.Router();
 
@@ -69,6 +70,8 @@ router.post("/signin", async (req: Request, res: Response): Promise<any> => {
       const rows: any = result as RowDataPacket[];
 
       if (rows.length === 0) {
+        console.log("not found", memid);
+        // throw new Api404Error(`User with id: ${memid}`);
         res.cookie("accessToken", "null");
         res.json({ body: "해당 아이디 없음" });
       }
