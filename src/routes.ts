@@ -3,8 +3,6 @@ import { indexRouter } from "./routes/index";
 import { bbsRouter } from "./routes/bbs";
 import { membersRouter } from "./routes/members";
 
-const router = express.Router();
-
 const routes = (app: Application): void => {
   app.all("/*", function (req, res, next) {
     res.header(
@@ -13,10 +11,9 @@ const routes = (app: Application): void => {
     );
     next(); // http://expressjs.com/guide.html#passing-route control
   });
-  router.get("/", indexRouter);
+  app.use("/", indexRouter);
   app.use("/bbs", bbsRouter);
-  app.use("/members", membersRouter);
-  app.use(router);
+  app.use("/api/members", membersRouter);
 };
 
 export default routes;

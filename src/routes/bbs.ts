@@ -55,7 +55,6 @@ router.get("/del-cookie", async (req: Request, res: Response): Promise<any> => {
 });
 
 router.get("/test-token", async (req: Request, res: Response): Promise<any> => {
-  console.log("test token");
   res.send("done");
 });
 

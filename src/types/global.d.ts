@@ -5,12 +5,4 @@ declare global {
   var db: mysql.Connection;
 }
 
-// declare global {
-//   namespace NodeJS {
-//     interface Global {
-//       db: any;
-//     }
-//   }
-// }
-
 export {};

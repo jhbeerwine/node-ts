@@ -25,6 +25,11 @@ module.exports = {
   devtool: "source-map",
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "index.js",
+    filename: "[name].js",
+  },
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+    },
   },
 };
